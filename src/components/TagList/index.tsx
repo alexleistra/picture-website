@@ -1,3 +1,6 @@
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Button } from "@/components/ui/button";
+
 export interface ITagListParams {
   tags: string[];
   searchTerm: string;
@@ -15,17 +18,18 @@ const TagList = ({ tags, searchTerm, setCurrentTag }: ITagListParams) => {
     : tags;
 
   return (
-    <ul>
+    <div className="flex flex-wrap gap-1">
       {filteredTags.map((tag) => (
-        <li
+        <Button
           key={tag}
+          value={tag}
+          aria-label={tag}
           onClick={() => setCurrentTag(tag)}
-          className="cursor-pointer py-1"
         >
           {tag}
-        </li>
+        </Button>
       ))}
-    </ul>
+    </div>
   );
 };
 

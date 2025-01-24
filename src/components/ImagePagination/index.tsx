@@ -7,6 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { ChevronFirst, ChevronLast } from "lucide-react";
 
 interface IPaginationParams {
   totalImages: number;
@@ -21,22 +22,34 @@ const ImagePagination = ({
   currentPage,
   onPageChange,
 }: IPaginationParams) => {
+  const totalPages = Math.ceil(totalImages / imagesPerPage);
   const pageNumbers: number[] = [];
-  for (let i = 1; i <= Math.ceil(totalImages / imagesPerPage); i++) {
+  for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
-  function paginationPrevious(currentPage: number) {
+  const paginationPrevious = (currentPage: number) => {
     if (currentPage > 1) onPageChange(currentPage - 1);
-  }
-  function paginationNext(currentPage: number) {
+  };
+  const paginationNext = (currentPage: number) => {
     if (currentPage < pageNumbers.length) onPageChange(currentPage + 1);
-  }
+  };
+  const handleLastClick = () => {
+    onPageChange(totalPages);
+  };
+  const handleFirstClick = () => {
+    onPageChange(1);
+  };
 
   return (
     <Pagination>
       <PaginationContent>
-        <PaginationItem>
+        <PaginationItem key="first">
+          <PaginationLink size="sm" onClick={handleFirstClick}>
+            <ChevronFirst /> First
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem key="previous">
           <PaginationPrevious onClick={() => paginationPrevious(currentPage)} />
         </PaginationItem>
 
@@ -48,7 +61,7 @@ const ImagePagination = ({
                 p > pageNumbers.length - 4)
           )
           .map((number) => (
-            <PaginationItem>
+            <PaginationItem key={number}>
               <PaginationLink
                 isActive={number == currentPage}
                 key={number}
@@ -58,15 +71,20 @@ const ImagePagination = ({
               </PaginationLink>
             </PaginationItem>
           ))}
-        {/* {currentPage < pageNumbers.length - 2 ? (
-          <PaginationItem>
+        {currentPage < pageNumbers.length - 2 ? (
+          <PaginationItem key="Ellipsis">
             <PaginationEllipsis />
           </PaginationItem>
         ) : (
           <></>
-        )} */}
-        <PaginationItem>
+        )}
+        <PaginationItem key="next">
           <PaginationNext onClick={() => paginationNext(currentPage)} />
+        </PaginationItem>
+        <PaginationItem key="last">
+          <PaginationLink size="sm" onClick={handleLastClick}>
+            Last <ChevronLast />
+          </PaginationLink>
         </PaginationItem>
       </PaginationContent>
     </Pagination>

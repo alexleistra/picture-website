@@ -7,6 +7,7 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 export interface ISidebarParams {
   tags: string[];
@@ -16,6 +17,10 @@ export interface ISidebarParams {
 const TagSidebar = ({ tags, setCurrentTag }: ISidebarParams) => {
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearch = (e: any) => setSearchTerm(e.target.value);
+  const handleClear = () => {
+    setSearchTerm("");
+    setCurrentTag("");
+  };
 
   return (
     <Sidebar>
@@ -27,6 +32,7 @@ const TagSidebar = ({ tags, setCurrentTag }: ISidebarParams) => {
           onChange={handleSearch}
           className="w-full p-2 mb-4 border"
         />
+        <Button onClick={handleClear}>Clear</Button>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

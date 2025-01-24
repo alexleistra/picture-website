@@ -9,15 +9,6 @@ import ImagePagination from "@/components/ImagePagination";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ThemeProvider, useTheme } from "@/components/ThemeProvider";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "./components/ui/button";
-import { Moon, Sun } from "lucide-react";
 
 function App() {
   const [images, setImages] = useState<IImageMetadata[]>([]);
@@ -51,62 +42,43 @@ function App() {
     indexOfFirstImage,
     indexOfLastImage
   );
-  const handlePageChange = (pageNumber: number) => setCurrentPage(pageNumber);
-  const { setTheme } = useTheme();
+  const handleTagChange = (tag: string) => {
+    setCurrentPage(1);
+    setCurrentTag(tag);
+  };
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SidebarProvider>
-        <div className="flex">
-          <TagSidebar tags={tags} setCurrentTag={setCurrentTag} />
-          <div className="flex flex-col w-full">
-            <div className="fixed w-full flex items-center p-4 gap-6 bg-background">
-              <SidebarTrigger size="icon" />
-              <ImagePagination
-                totalImages={filteredImages.length}
-                imagesPerPage={imagesPerPage}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
+    <SidebarProvider>
+      <div className="flex">
+        <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
+        <div className="flex flex-col w-full">
+          <div className="fixed w-full flex items-center p-4 gap-6 bg-background">
+            <SidebarTrigger size="icon" />
+            <ImagePagination
+              totalImages={filteredImages.length}
+              imagesPerPage={imagesPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+            />
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="imagesPerPage">Images Per Page</Label>
+              <Input
+                id="imagesPerPage"
+                className="max-w-16"
+                type="number"
+                value={imagesPerPage}
+                onChange={(e) => {
+                  setImagesPerPage(Number(e.target.value));
+                }}
               />
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="imagesPerPage">Images Per Page</Label>
-                <Input
-                  id="imagesPerPage"
-                  type="number"
-                  value={imagesPerPage}
-                  onChange={(e) => {
-                    setImagesPerPage(Number(e.target.value));
-                  }}
-                />
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="mt-24">
-              <ImageGrid images={currentImages} />
             </div>
           </div>
+          <div className="mt-24">
+            <ImageGrid images={currentImages} />
+          </div>
         </div>
-      </SidebarProvider>
-    </ThemeProvider>
+      </div>
+    </SidebarProvider>
   );
 }
 
