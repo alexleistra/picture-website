@@ -45,20 +45,6 @@ const TagSidebar = ({ tags, setCurrentTag }: ISidebarParams) => {
       </SidebarContent>
       <SidebarFooter />
     </Sidebar>
-    // <div className="w-1/4 h-screen overflow-y-auto bg-gray-100 p-4">
-    //   <input
-    //     type="text"
-    //     placeholder="Search Tags"
-    //     value={searchTerm}
-    //     onChange={handleSearch}
-    //     className="w-full p-2 mb-4 border"
-    //   />
-    //   <TagList
-    //     tags={tags}
-    //     searchTerm={searchTerm}
-    //     setCurrentTag={setCurrentTag}
-    //   />
-    // </div>
   );
 };
 

@@ -1,5 +1,5 @@
 export interface IImageMetadata {
   file: string;
-  created: number;
+  alt: string;
   tags: string[];
 }

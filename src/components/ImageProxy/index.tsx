@@ -27,7 +27,15 @@ const ImageProxy = ({ src, alt, className, ...options }: IImageProxy) => {
     }
   }
 
-  return <img src={src} alt={alt} className={className} {...options} />;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`${className}`}
+      {...options}
+      loading="lazy"
+    />
+  );
 };
 
 export default ImageProxy;

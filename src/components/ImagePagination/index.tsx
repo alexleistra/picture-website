@@ -22,6 +22,7 @@ const ImagePagination = ({
   currentPage,
   onPageChange,
 }: IPaginationParams) => {
+  const visiblePages = 4;
   const totalPages = Math.ceil(totalImages / imagesPerPage);
   const pageNumbers: number[] = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -56,9 +57,9 @@ const ImagePagination = ({
         {pageNumbers
           .filter(
             (p) =>
-              (p < currentPage + 4 && p > 0 && p >= currentPage) ||
-              (currentPage > pageNumbers.length - 4 &&
-                p > pageNumbers.length - 4)
+              (p < currentPage + visiblePages && p > 0 && p >= currentPage) ||
+              (currentPage > pageNumbers.length - visiblePages &&
+                p > pageNumbers.length - visiblePages)
           )
           .map((number) => (
             <PaginationItem key={number}>
@@ -71,7 +72,7 @@ const ImagePagination = ({
               </PaginationLink>
             </PaginationItem>
           ))}
-        {currentPage < pageNumbers.length - 2 ? (
+        {currentPage < pageNumbers.length - visiblePages + 1 ? (
           <PaginationItem key="Ellipsis">
             <PaginationEllipsis />
           </PaginationItem>

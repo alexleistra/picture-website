@@ -1,11 +1,12 @@
-import { IImageMetadata } from "@/types";
+import { IImageMetadata } from "@/types/ImageMetadata";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ImageProxy from "../ImageProxy";
 import {
   Carousel,
@@ -22,18 +23,19 @@ export interface IImageGridParams {
 
 const ImageGrid = ({ images }: IImageGridParams) => {
   const [emblaApi, setEmblaApi] = useState<CarouselApi>();
-  const [selectedImage, setSelectedImage] = useState<number>(0);
-  const [slidesInView, setSlidesInView] = useState<number[]>([]);
+  const [selectedImage, setSelectedImage] = useState<IImageMetadata>(images[0]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const setSelected = (image: IImageMetadata, index: number) => {
+    setSelectedImage(image);
+    setSelectedImageIndex(index);
+  };
 
   useEffect(() => {
     if (!emblaApi) {
       return;
     }
-    emblaApi?.scrollTo(selectedImage, true);
-    emblaApi.on("slidesInView", () => {
-      setSlidesInView(emblaApi.slidesInView());
-    });
-  }, [emblaApi, selectedImage]);
+    emblaApi?.scrollTo(selectedImageIndex, true);
+  }, [emblaApi, selectedImageIndex]);
 
   return (
     <>
@@ -41,10 +43,10 @@ const ImageGrid = ({ images }: IImageGridParams) => {
         <div className="flex flex-wrap gap-4 p-4 justify-center">
           {images.map((image: IImageMetadata, index) => (
             <div key={index}>
-              <DialogTrigger onClick={() => setSelectedImage(index)}>
+              <DialogTrigger onClick={() => setSelected(image, index)}>
                 <ImageProxy
                   className="h-auto w-[40vw] md:h-80 md:w-auto"
-                  src={`/images/${image.file}`}
+                  src={`${import.meta.env.VITE_IMAGE_PATH}${image.file}`}
                   alt={image.file}
                   height="320"
                   format="webp"
@@ -53,52 +55,54 @@ const ImageGrid = ({ images }: IImageGridParams) => {
             </div>
           ))}
         </div>
-        <DialogTitle></DialogTitle>
         <DialogContent
           aria-describedby="Image carousel"
-          className="max-w-screen p-0"
+          className="min-w-full h-screen"
         >
-          <div className="flex justify-center">
-            <Carousel
-              setApi={setEmblaApi}
-              className="w-full md:max-w-[70vw] h-screen"
-            >
+          <DialogHeader>
+            <DialogTitle></DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col max-h-max">
+            <div>
+              {selectedImage?.file != undefined ? (
+                <ImageProxy
+                  src={
+                    selectedImage
+                      ? `${import.meta.env.VITE_IMAGE_PATH}/${
+                          selectedImage?.file
+                        }`
+                      : ""
+                  }
+                  alt={selectedImage.file}
+                  className="max-h-full"
+                  format="webp"
+                />
+              ) : (
+                <img height="1080" />
+              )}
+            </div>
+            <Carousel setApi={setEmblaApi} className="px-10 bg-background">
+              <CarouselPrevious className="absolute left-0 h-30" />
+
               <CarouselContent>
                 {images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <ImageProxy
-                      src={`/images/${image?.file}`}
-                      alt={image.file}
-                      className="max-h-[80vh] mx-auto"
-                      format="webp"
-                    />
+                  <CarouselItem key={index} className="basis-1/">
+                    <div className="" onClick={() => setSelected(image, index)}>
+                      <ImageProxy
+                        src={`${import.meta.env.VITE_IMAGE_PATH}/${
+                          image?.file
+                        }`}
+                        alt={image.file}
+                        className=""
+                        format="webp"
+                        height="200"
+                      />
+                    </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
 
-              <CarouselPrevious />
-              <div className="flex flex-row overflow-x-scroll">
-                {images.map((image: IImageMetadata, index) => (
-                  <div
-                    className={`flex-none max-h-min${
-                      slidesInView[0] == index
-                        ? " border-solid border-2 border-red-700"
-                        : ""
-                    }`}
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                  >
-                    <ImageProxy
-                      className="h-32 w-auto"
-                      src={`/images/${image.file}`}
-                      alt={image.file}
-                      height="100"
-                      format="webp"
-                    />
-                  </div>
-                ))}
-              </div>
-              <CarouselNext />
+              <CarouselNext className="absolute right-0 h-30" />
             </Carousel>
           </div>
         </DialogContent>

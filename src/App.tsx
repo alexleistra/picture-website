@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import data from "../public/images/image_tags.json";
-import uniqueTags from "../public/images/all_tags.json";
 import "./App.css";
-import { IImageMetadata } from "./types";
+import { IImageMetadata } from "./types/ImageMetadata";
 import TagSidebar from "@/components/TagSidebar";
 import ImageGrid from "@/components/ImageGrid";
-import ImagePagination from "@/components/ImagePagination";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import Header from "@/components/Header";
 
 function App() {
   const [images, setImages] = useState<IImageMetadata[]>([]);
@@ -16,14 +12,33 @@ function App() {
   const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [imagesPerPage, setImagesPerPage] = useState(24);
+  const [imagesPerPage, setImagesPerPage] = useState(16);
 
   useEffect(() => {
     // read JSON file and initialize state
-    setImages(data);
-    setFilteredImages(data);
-    uniqueTags.sort();
-    setTags(uniqueTags);
+    const dataPromise = fetch(
+      `${import.meta.env.VITE_IMAGE_PATH}/image_tags.json`
+    );
+    const allTagsPromise = fetch(
+      `${import.meta.env.VITE_IMAGE_PATH}/all_tags.json`
+    );
+
+    Promise.all([dataPromise, allTagsPromise]);
+
+    dataPromise.then(async (res: Response) => {
+      if (res.ok) {
+        const data = (await res.json()) as IImageMetadata[];
+        setImages(data);
+        setFilteredImages(data);
+      }
+    });
+    allTagsPromise.then(async (res: Response) => {
+      if (res.ok) {
+        const uniqueTags = (await res.json()) as string[];
+        uniqueTags.sort();
+        setTags(uniqueTags);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -46,36 +61,25 @@ function App() {
     setCurrentPage(1);
     setCurrentTag(tag);
   };
+  const handleImagesPerPageChange = (n: number) => {
+    setCurrentPage(1);
+    setImagesPerPage(n);
+  };
 
   return (
     <SidebarProvider>
-      <div className="flex">
-        <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
-        <div className="flex flex-col w-full">
-          <div className="fixed w-full flex items-center p-4 gap-6 bg-background">
-            <SidebarTrigger size="icon" />
-            <ImagePagination
-              totalImages={filteredImages.length}
-              imagesPerPage={imagesPerPage}
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-            />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="imagesPerPage">Images Per Page</Label>
-              <Input
-                id="imagesPerPage"
-                className="max-w-16"
-                type="number"
-                value={imagesPerPage}
-                onChange={(e) => {
-                  setImagesPerPage(Number(e.target.value));
-                }}
-              />
-            </div>
-          </div>
-          <div className="mt-24">
-            <ImageGrid images={currentImages} />
-          </div>
+      <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
+      <div className="w-full">
+        <Header
+          currentPage={currentPage}
+          filteredImages={filteredImages}
+          imagesPerPage={imagesPerPage}
+          setCurrentPage={setCurrentPage}
+          handleImagesPerPageChange={handleImagesPerPageChange}
+        />
+
+        <div className="mt-24">
+          <ImageGrid images={currentImages} />
         </div>
       </div>
     </SidebarProvider>
