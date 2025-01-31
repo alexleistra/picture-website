@@ -5,6 +5,7 @@ import TagSidebar from "@/components/TagSidebar";
 import ImageGrid from "@/components/ImageGrid";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/Header";
+import { PaginationContext } from "@/contexts/paginationContext";
 
 function App() {
   const [images, setImages] = useState<IImageMetadata[]>([]);
@@ -67,22 +68,20 @@ function App() {
   };
 
   return (
-    <SidebarProvider>
-      <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
-      <div className="w-full">
-        <Header
-          currentPage={currentPage}
-          filteredImages={filteredImages}
-          imagesPerPage={imagesPerPage}
-          setCurrentPage={setCurrentPage}
-          handleImagesPerPageChange={handleImagesPerPageChange}
-        />
+    <PaginationContext.Provider
+      value={{ currentPage, imagesPerPage, filteredImages, setCurrentPage }}
+    >
+      <SidebarProvider>
+        <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
+        <div className="w-full">
+          <Header handleImagesPerPageChange={handleImagesPerPageChange} />
 
-        <div className="mt-24">
-          <ImageGrid images={currentImages} />
+          <div className="mt-24">
+            <ImageGrid images={currentImages} />
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </PaginationContext.Provider>
   );
 }
 

@@ -7,39 +7,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { PaginationContext } from "@/contexts/paginationContext";
 import { ChevronFirst, ChevronLast } from "lucide-react";
+import { useContext } from "react";
 
-interface IPaginationParams {
-  totalImages: number;
-  imagesPerPage: number;
-  currentPage: number;
-  onPageChange: (pageNumber: number) => void;
-}
+const ImagePagination = () => {
+  const pagination = useContext(PaginationContext);
 
-const ImagePagination = ({
-  totalImages,
-  imagesPerPage,
-  currentPage,
-  onPageChange,
-}: IPaginationParams) => {
   const visiblePages = 4;
-  const totalPages = Math.ceil(totalImages / imagesPerPage);
+  const totalPages = Math.ceil(
+    pagination.filteredImages.length / pagination.imagesPerPage
+  );
   const pageNumbers: number[] = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
   const paginationPrevious = (currentPage: number) => {
-    if (currentPage > 1) onPageChange(currentPage - 1);
+    if (currentPage > 1) pagination.setCurrentPage(currentPage - 1);
   };
   const paginationNext = (currentPage: number) => {
-    if (currentPage < pageNumbers.length) onPageChange(currentPage + 1);
+    if (currentPage < pageNumbers.length)
+      pagination.setCurrentPage(currentPage + 1);
   };
   const handleLastClick = () => {
-    onPageChange(totalPages);
+    pagination.setCurrentPage(totalPages);
   };
   const handleFirstClick = () => {
-    onPageChange(1);
+    pagination.setCurrentPage(1);
   };
 
   return (
@@ -47,32 +42,37 @@ const ImagePagination = ({
       <PaginationContent>
         <PaginationItem key="first">
           <PaginationLink size="sm" onClick={handleFirstClick}>
-            <ChevronFirst /> First
+            <ChevronFirst />
+            <span className="hidden sm:block"> First</span>
           </PaginationLink>
         </PaginationItem>
         <PaginationItem key="previous">
-          <PaginationPrevious onClick={() => paginationPrevious(currentPage)} />
+          <PaginationPrevious
+            onClick={() => paginationPrevious(pagination.currentPage)}
+          />
         </PaginationItem>
 
         {pageNumbers
           .filter(
             (p) =>
-              (p < currentPage + visiblePages && p > 0 && p >= currentPage) ||
-              (currentPage > pageNumbers.length - visiblePages &&
+              (p < pagination.currentPage + visiblePages &&
+                p > 0 &&
+                p >= pagination.currentPage) ||
+              (pagination.currentPage > pageNumbers.length - visiblePages &&
                 p > pageNumbers.length - visiblePages)
           )
           .map((number) => (
             <PaginationItem key={number}>
               <PaginationLink
-                isActive={number == currentPage}
+                isActive={number == pagination.currentPage}
                 key={number}
-                onClick={() => onPageChange(number)}
+                onClick={() => pagination.setCurrentPage(number)}
               >
                 {number}
               </PaginationLink>
             </PaginationItem>
           ))}
-        {currentPage < pageNumbers.length - visiblePages + 1 ? (
+        {pagination.currentPage < pageNumbers.length - visiblePages + 1 ? (
           <PaginationItem key="Ellipsis">
             <PaginationEllipsis />
           </PaginationItem>
@@ -80,11 +80,14 @@ const ImagePagination = ({
           <></>
         )}
         <PaginationItem key="next">
-          <PaginationNext onClick={() => paginationNext(currentPage)} />
+          <PaginationNext
+            onClick={() => paginationNext(pagination.currentPage)}
+          />
         </PaginationItem>
         <PaginationItem key="last">
           <PaginationLink size="sm" onClick={handleLastClick}>
-            Last <ChevronLast />
+            <span className="hidden sm:block">Last </span>
+            <ChevronLast />
           </PaginationLink>
         </PaginationItem>
       </PaginationContent>
