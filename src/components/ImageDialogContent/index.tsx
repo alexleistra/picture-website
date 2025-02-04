@@ -30,7 +30,7 @@ const ImageDialogContent = ({
         <DialogTitle className="mx-auto py-3">{selectedImage?.alt}</DialogTitle>
       </DialogHeader>
       <div className="absolute bottom-0 w-full">
-        <div className="">
+        <div className="flex justify-center">
           {selectedImage?.file != undefined ? (
             <ImageProxy
               src={

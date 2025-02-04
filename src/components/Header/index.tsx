@@ -3,7 +3,7 @@ import ImagePagination from "@/components/ImagePagination";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useContext } from "react";
-import { PaginationContext } from "@/contexts/paginationContext";
+import { PaginationContext } from "@/contexts/PaginationContext";
 
 export interface HeaderProps {
   handleImagesPerPageChange: (n: number) => void;

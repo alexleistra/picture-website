@@ -5,52 +5,39 @@ import TagSidebar from "@/components/TagSidebar";
 import ImageGrid from "@/components/ImageGrid";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/Header";
-import { PaginationContext } from "@/contexts/paginationContext";
+import { PaginationContext } from "@/contexts/PaginationContext";
 
 function App() {
   const [images, setImages] = useState<IImageMetadata[]>([]);
   const [filteredImages, setFilteredImages] = useState<IImageMetadata[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [currentTag, setCurrentTag] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [imagesPerPage, setImagesPerPage] = useState(16);
 
   useEffect(() => {
     // read JSON file and initialize state
-    const dataPromise = fetch(
-      `${import.meta.env.VITE_IMAGE_PATH}/image_tags.json`
-    );
-    const allTagsPromise = fetch(
-      `${import.meta.env.VITE_IMAGE_PATH}/all_tags.json`
-    );
-
-    Promise.all([dataPromise, allTagsPromise]);
-
-    dataPromise.then(async (res: Response) => {
-      if (res.ok) {
-        const data = (await res.json()) as IImageMetadata[];
-        setImages(data);
-        setFilteredImages(data);
+    fetch(`${import.meta.env.VITE_IMAGE_PATH}/image_tags.json`).then(
+      async (res: Response) => {
+        if (res.ok) {
+          const data = (await res.json()) as IImageMetadata[];
+          setImages(data);
+          setFilteredImages(data);
+        }
       }
-    });
-    allTagsPromise.then(async (res: Response) => {
-      if (res.ok) {
-        const uniqueTags = (await res.json()) as string[];
-        uniqueTags.sort();
-        setTags(uniqueTags);
-      }
-    });
+    );
   }, []);
 
   useEffect(() => {
-    if (currentTag) {
+    if (selectedTags) {
       setFilteredImages(
-        images.filter((image) => image.tags.includes(currentTag))
+        images.filter((image) => {
+          const selectedTagsSet = new Set(selectedTags);
+          return image.tags.some((item) => selectedTagsSet.has(item));
+        })
       );
     } else {
       setFilteredImages(images);
     }
-  }, [currentTag, images]);
+  }, [selectedTags, images]);
 
   const indexOfLastImage = currentPage * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
@@ -58,9 +45,9 @@ function App() {
     indexOfFirstImage,
     indexOfLastImage
   );
-  const handleTagChange = (tag: string) => {
+  const handleSelectedTagsChange = (tags: string[]) => {
     setCurrentPage(1);
-    setCurrentTag(tag);
+    setSelectedTags(tags);
   };
   const handleImagesPerPageChange = (n: number) => {
     setCurrentPage(1);
@@ -72,7 +59,7 @@ function App() {
       value={{ currentPage, imagesPerPage, filteredImages, setCurrentPage }}
     >
       <SidebarProvider>
-        <TagSidebar tags={tags} setCurrentTag={handleTagChange} />
+        <TagSidebar tags={tags} setCurrentTags={handleSelectedTagsChange} />
         <div className="w-full">
           <Header handleImagesPerPageChange={handleImagesPerPageChange} />
 

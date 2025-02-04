@@ -7,7 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { PaginationContext } from "@/contexts/paginationContext";
+import { PaginationContext } from "@/contexts/PaginationContext";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 import { useContext } from "react";
 

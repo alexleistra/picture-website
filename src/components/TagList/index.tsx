@@ -1,10 +1,11 @@
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
 export interface ITagListParams {
   tags: string[];
   searchTerm: string;
-  setCurrentTag: (str: string) => void;
+  setCurrentTags: (tags: string[]) => void;
 }
 
 const fuzzyMatch = (pattern: string, str: string) => {
@@ -12,7 +13,7 @@ const fuzzyMatch = (pattern: string, str: string) => {
   return new RegExp(pattern).test(str);
 };
 
-const TagList = ({ tags, searchTerm, setCurrentTag }: ITagListParams) => {
+const TagList = ({ tags, searchTerm, setCurrentTags }: ITagListParams) => {
   const filteredTags = searchTerm
     ? tags.filter((tag) => fuzzyMatch(searchTerm, tag))
     : tags;
@@ -20,14 +21,24 @@ const TagList = ({ tags, searchTerm, setCurrentTag }: ITagListParams) => {
   return (
     <div className="flex flex-wrap gap-1">
       {filteredTags.map((tag) => (
-        <Button
-          key={tag}
-          value={tag}
-          aria-label={tag}
-          onClick={() => setCurrentTag(tag)}
-        >
-          {tag}
-        </Button>
+        <Badge key={tag} aria-label={tag}>
+          <Checkbox
+            id={tag}
+            onCheckedChange={(checked: CheckedState) => {
+              if (checked) {
+                setCurrentTags([tag]);
+              } else {
+                setCurrentTags([]);
+              }
+            }}
+          />
+          <label
+            htmlFor={tag}
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {tag}
+          </label>
+        </Badge>
       ))}
     </div>
   );

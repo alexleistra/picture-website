@@ -11,15 +11,15 @@ import { Button } from "@/components/ui/button";
 
 export interface ISidebarParams {
   tags: string[];
-  setCurrentTag: (str: string) => void;
+  setCurrentTags: (tags: string[]) => void;
 }
 
-const TagSidebar = ({ tags, setCurrentTag }: ISidebarParams) => {
+const TagSidebar = ({ tags, setCurrentTags }: ISidebarParams) => {
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearch = (e: any) => setSearchTerm(e.target.value);
   const handleClear = () => {
     setSearchTerm("");
-    setCurrentTag("");
+    setCurrentTags([]);
   };
 
   return (
@@ -39,7 +39,7 @@ const TagSidebar = ({ tags, setCurrentTag }: ISidebarParams) => {
           <TagList
             tags={tags}
             searchTerm={searchTerm}
-            setCurrentTag={setCurrentTag}
+            setCurrentTags={setCurrentTags}
           />
         </SidebarGroup>
       </SidebarContent>
