@@ -40,7 +40,7 @@ const ImageCarousel = ({
             <div onClick={() => setSelected(image, index)}>
               <ImageProxy
                 src={`${import.meta.env.VITE_IMAGE_PATH}/${image?.file}`}
-                alt={image.file}
+                alt={image.alt}
                 className={
                   selectedImageIndex == index
                     ? "h-32 lg:h-48"

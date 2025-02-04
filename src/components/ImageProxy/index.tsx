@@ -7,7 +7,7 @@ export interface IImageProxyOptions {
   quality?: number;
 }
 
-export interface IImageProxy extends IImageProxyOptions {
+export interface IImage extends IImageProxyOptions {
   className?: string;
   alt: string;
   src: string;
@@ -23,7 +23,7 @@ const ImageProxy = ({
   width,
   height,
   options,
-}: IImageProxy) => {
+}: IImage) => {
   if (import.meta.env.VITE_IMAGE_PROXY_URL) {
     src = `${import.meta.env.VITE_IMAGE_PROXY_URL}?img=${encodeURIComponent(
       src.startsWith("http") ? src : window.location.origin + src

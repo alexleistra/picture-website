@@ -7,34 +7,31 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { PaginationContext } from "@/contexts/paginationContext";
+import { usePaginationContext } from "@/contexts/PaginationContext";
 import { ChevronFirst, ChevronLast } from "lucide-react";
-import { useContext } from "react";
 
 const ImagePagination = () => {
-  const pagination = useContext(PaginationContext);
+  const { itemCount, itemsPerPage, currentPage, setCurrentPage } =
+    usePaginationContext();
 
   const visiblePages = 4;
-  const totalPages = Math.ceil(
-    pagination.filteredImages.length / pagination.imagesPerPage
-  );
+  const totalPages = Math.ceil(itemCount / itemsPerPage);
   const pageNumbers: number[] = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
   const paginationPrevious = (currentPage: number) => {
-    if (currentPage > 1) pagination.setCurrentPage(currentPage - 1);
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
   const paginationNext = (currentPage: number) => {
-    if (currentPage < pageNumbers.length)
-      pagination.setCurrentPage(currentPage + 1);
+    if (currentPage < pageNumbers.length) setCurrentPage(currentPage + 1);
   };
   const handleLastClick = () => {
-    pagination.setCurrentPage(totalPages);
+    setCurrentPage(totalPages);
   };
   const handleFirstClick = () => {
-    pagination.setCurrentPage(1);
+    setCurrentPage(1);
   };
 
   return (
@@ -47,32 +44,28 @@ const ImagePagination = () => {
           </PaginationLink>
         </PaginationItem>
         <PaginationItem key="previous">
-          <PaginationPrevious
-            onClick={() => paginationPrevious(pagination.currentPage)}
-          />
+          <PaginationPrevious onClick={() => paginationPrevious(currentPage)} />
         </PaginationItem>
 
         {pageNumbers
           .filter(
             (p) =>
-              (p < pagination.currentPage + visiblePages &&
-                p > 0 &&
-                p >= pagination.currentPage) ||
-              (pagination.currentPage > pageNumbers.length - visiblePages &&
+              (p < currentPage + visiblePages && p > 0 && p >= currentPage) ||
+              (currentPage > pageNumbers.length - visiblePages &&
                 p > pageNumbers.length - visiblePages)
           )
           .map((number) => (
             <PaginationItem key={number}>
               <PaginationLink
-                isActive={number == pagination.currentPage}
+                isActive={number == currentPage}
                 key={number}
-                onClick={() => pagination.setCurrentPage(number)}
+                onClick={() => setCurrentPage(number)}
               >
                 {number}
               </PaginationLink>
             </PaginationItem>
           ))}
-        {pagination.currentPage < pageNumbers.length - visiblePages + 1 ? (
+        {currentPage < pageNumbers.length - visiblePages + 1 ? (
           <PaginationItem key="Ellipsis">
             <PaginationEllipsis />
           </PaginationItem>
@@ -80,10 +73,9 @@ const ImagePagination = () => {
           <></>
         )}
         <PaginationItem key="next">
-          <PaginationNext
-            onClick={() => paginationNext(pagination.currentPage)}
-          />
+          <PaginationNext onClick={() => paginationNext(currentPage)} />
         </PaginationItem>
+
         <PaginationItem key="last">
           <PaginationLink size="sm" onClick={handleLastClick}>
             <span className="hidden sm:block">Last </span>
