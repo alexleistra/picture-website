@@ -38,7 +38,7 @@ const ImageDialogContent = ({
                   ? `${import.meta.env.VITE_IMAGE_PATH}/${selectedImage?.file}`
                   : ""
               }
-              alt={selectedImage.file}
+              alt={selectedImage.alt}
               className=""
               options={{ format: "webp", height: "672" }}
             />

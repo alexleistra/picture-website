@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TagList from "@/components/TagList";
+
 import {
   Sidebar,
   SidebarContent,
@@ -8,18 +9,18 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { useTagsContext } from "@/contexts/TagsContext";
+import { usePaginationContext } from "@/contexts/PaginationContext";
+const TagSidebar = () => {
+  const { setSelectedTags } = useTagsContext();
+  const { setCurrentPage } = usePaginationContext();
 
-export interface ISidebarParams {
-  tags: string[];
-  setCurrentTags: (tags: string[]) => void;
-}
-
-const TagSidebar = ({ tags, setCurrentTags }: ISidebarParams) => {
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearch = (e: any) => setSearchTerm(e.target.value);
   const handleClear = () => {
     setSearchTerm("");
-    setCurrentTags([]);
+    setSelectedTags([]);
+    setCurrentPage(1);
   };
 
   return (
@@ -36,11 +37,7 @@ const TagSidebar = ({ tags, setCurrentTags }: ISidebarParams) => {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <TagList
-            tags={tags}
-            searchTerm={searchTerm}
-            setCurrentTags={setCurrentTags}
-          />
+          <TagList searchTerm={searchTerm} />
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter />

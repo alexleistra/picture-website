@@ -1,31 +1,27 @@
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface ITagsContext {
-  tags: Set<string>;
-  selectedTags: Set<string>;
-  setSelected: (tag: string, selected: boolean) => void;
+  tags: string[];
+  selectedTags: string[];
+  setTags: (tags: string[]) => void;
+  setSelectedTags: (tags: string[]) => void;
 }
 
-export const TagsContext = createContext<ITagsContext>({
-  tags: new Set([]),
-  selectedTags: new Set([]),
-  setSelected: () => {},
-});
+export const TagsContext = createContext<ITagsContext | undefined>(undefined);
 
-export const TagsContextProvider: React.FC = ({
+export const useTagsContext = () => {
+  const context = useContext(TagsContext);
+  if (context === undefined) {
+    throw new Error("useTagsContext must be used within a TagsContextProvider");
+  }
+  return context;
+};
+
+export const TagsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
-}: PropsWithChildren) => {
-  const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set([]));
-  const [tags, setTags] = useState<Set<string>>(new Set([]));
-  const setSelected = (tag: string, selected: boolean) => {
-    if (selected) {
-      selectedTags.add(tag);
-      setSelectedTags(selectedTags);
-    } else {
-      selectedTags.delete(tag);
-      setSelectedTags(selectedTags);
-    }
-  };
+}) => {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
     // read JSON file and initialize state
@@ -34,14 +30,21 @@ export const TagsContextProvider: React.FC = ({
         if (res.ok) {
           const uniqueTags = (await res.json()) as string[];
           uniqueTags.sort();
-          setTags(new Set(uniqueTags));
+          setTags(uniqueTags);
         }
       }
     );
   }, []);
 
   return (
-    <TagsContext.Provider value={{ tags, selectedTags, setSelected }}>
+    <TagsContext.Provider
+      value={{
+        tags,
+        selectedTags,
+        setTags,
+        setSelectedTags,
+      }}
+    >
       {children}
     </TagsContext.Provider>
   );
