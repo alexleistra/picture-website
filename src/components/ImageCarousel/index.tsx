@@ -31,8 +31,8 @@ const ImageCarousel = ({
   }, [emblaApi, selectedImageIndex]);
 
   return (
-    <Carousel setApi={setEmblaApi} className="px-10 bg-background">
-      <CarouselPrevious size="icon" className="absolute left-0" />
+    <Carousel setApi={setEmblaApi} className="px-14 bg-background">
+      <CarouselPrevious size="icon" className="absolute left-3" />
 
       <CarouselContent className="flex items-center">
         {images.map((image, index) => (
@@ -53,7 +53,7 @@ const ImageCarousel = ({
         ))}
       </CarouselContent>
 
-      <CarouselNext className="absolute right-0" />
+      <CarouselNext className="absolute right-3" />
     </Carousel>
   );
 };

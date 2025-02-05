@@ -24,10 +24,12 @@ const ImageDialogContent = ({
   return (
     <DialogContent
       aria-describedby="Image carousel"
-      className="top-0 left-0 translate-x-0 translate-y-0 p-0 max-w-full m-auto h-screen"
+      className="top-0 left-0 translate-x-0 translate-y-0 p-0 max-w-full m-auto h-full"
     >
       <DialogHeader>
-        <DialogTitle className="mx-auto py-3">{selectedImage?.alt}</DialogTitle>
+        <DialogTitle className="mx-auto py-3 pt-8">
+          {selectedImage?.alt}
+        </DialogTitle>
       </DialogHeader>
       <div className="absolute bottom-0 w-full">
         <div className="flex justify-center">
@@ -39,7 +41,7 @@ const ImageDialogContent = ({
                   : ""
               }
               alt={selectedImage.alt}
-              className=""
+              className="max-h-[60vh] max-w-full"
               options={{ format: "webp", height: "672" }}
             />
           ) : (
@@ -54,8 +56,9 @@ const ImageDialogContent = ({
             selectedImageIndex={selectedImageIndex}
             setSelected={setSelected}
           />
-
-          <ImagePagination />
+          <div className="py-4">
+            <ImagePagination />
+          </div>
         </div>
       </div>
     </DialogContent>

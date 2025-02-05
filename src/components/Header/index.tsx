@@ -9,13 +9,14 @@ const Header = () => {
     usePaginationContext();
 
   return (
-    <div className="sticky top-0 flex self-start items-center h-20 w-auto gap-4 px-5 bg-background">
-      <SidebarTrigger size="icon" />
-
-      <div className="mx-auto">
+    <div className="sticky top-0 flex justify-between flex-wrap self-start sm:items-center h-20 w-auto gap-4 px-5 bg-background">
+      <div className="order-1 p-3">
+        <SidebarTrigger size="icon" />
+      </div>
+      <div className="order-3 lg:order-2 w-full lg:w-auto mx-auto">
         <ImagePagination />
       </div>
-      <div className="flex items-center gap-3">
+      <div className="order-2 lg:order-3 items-center gap-3">
         <Label htmlFor="imagesPerPage">Images Per Page</Label>
         <Input
           id="imagesPerPage"
