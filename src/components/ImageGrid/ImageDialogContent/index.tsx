@@ -43,8 +43,7 @@ const ImageDialogContent = ({
               options={{ format: "webp", height: "672" }}
             />
           ) : (
-            // TODO spinner
-            <img height="672" />
+            <img height="672" src="placeholder.png" />
           )}
         </div>
 
