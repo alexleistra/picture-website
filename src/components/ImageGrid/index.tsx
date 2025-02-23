@@ -17,6 +17,7 @@ const ImageGrid = ({ images }: IImageGridParams) => {
     itemsPerPage: imagesPerPage,
     setItemCount,
   } = usePaginationContext();
+
   const [currentImages, setCurrentImages] = useState<IImageMetadata[]>(images);
   const [selectedImage, setSelectedImage] = useState<IImageMetadata>(images[0]);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -38,6 +39,7 @@ const ImageGrid = ({ images }: IImageGridParams) => {
     const indexOfFirstImage = indexOfLastImage - imagesPerPage;
     setItemCount(filteredImages.length);
     setCurrentImages(filteredImages.slice(indexOfFirstImage, indexOfLastImage));
+    setSelected(filteredImages[indexOfFirstImage], 0);
   }, [selectedTags, images, currentPage, imagesPerPage]);
 
   return (
