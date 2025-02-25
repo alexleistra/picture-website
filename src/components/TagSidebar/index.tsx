@@ -11,12 +11,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { useTagsContext } from "@/contexts/TagsContext";
 import { usePaginationContext } from "@/contexts/PaginationContext";
+import { Input } from "@/components/ui/input";
 const TagSidebar = () => {
   const { setSelectedTags } = useTagsContext();
   const { setCurrentPage } = usePaginationContext();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const handleSearch = (e: any) => setSearchTerm(e.target.value);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchTerm(e.target.value);
   const handleClear = () => {
     setSearchTerm("");
     setSelectedTags([]);
@@ -26,7 +28,7 @@ const TagSidebar = () => {
   return (
     <Sidebar>
       <SidebarHeader>
-        <input
+        <Input
           type="text"
           placeholder="Search Tags"
           value={searchTerm}

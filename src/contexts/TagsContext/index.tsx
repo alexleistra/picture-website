@@ -3,11 +3,16 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface ITagsContext {
   tags: string[];
   selectedTags: string[];
+  confidenceTolerance: number;
   setTags: (tags: string[]) => void;
   setSelectedTags: (tags: string[]) => void;
+  setConfidenceTolerance: (tolerance: number) => void;
+  setTagSelected: (tag: string, selected: boolean) => void;
 }
 
-export const TagsContext = createContext<ITagsContext | undefined>(undefined);
+const TagsContext = createContext<ITagsContext | undefined>(undefined);
+
+export const DEFAULT_TOLERANCE = 80;
 
 export const useTagsContext = () => {
   const context = useContext(TagsContext);
@@ -22,6 +27,8 @@ export const TagsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [confidenceTolerance, setConfidenceTolerance] =
+    useState<number>(DEFAULT_TOLERANCE);
 
   useEffect(() => {
     // read JSON file and initialize state
@@ -36,13 +43,24 @@ export const TagsContextProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }, []);
 
+  const setTagSelected = (tag: string, selected: boolean) => {
+    if (selected) {
+      setSelectedTags([...selectedTags, tag]);
+    } else {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    }
+  };
+
   return (
     <TagsContext.Provider
       value={{
         tags,
         selectedTags,
+        confidenceTolerance,
         setTags,
         setSelectedTags,
+        setConfidenceTolerance,
+        setTagSelected,
       }}
     >
       {children}

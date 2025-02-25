@@ -14,20 +14,12 @@ const fuzzyMatch = (pattern: string, str: string) => {
 };
 
 const TagList = ({ searchTerm }: ITagListParams) => {
-  const { tags, selectedTags, setSelectedTags } = useTagsContext();
+  const { tags, selectedTags, setTagSelected } = useTagsContext();
   const { setCurrentPage } = usePaginationContext();
 
   const filteredTags = searchTerm
     ? [...tags].filter((tag) => fuzzyMatch(searchTerm, tag))
     : [...tags];
-
-  const setTagSelected = (tag: string, selected: boolean) => {
-    if (selected) {
-      setSelectedTags([...selectedTags, tag]);
-    } else {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
-    }
-  };
 
   return (
     <div className="flex flex-wrap gap-1">

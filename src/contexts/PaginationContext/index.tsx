@@ -9,7 +9,7 @@ export interface IPaginationContext {
   setItemCount: (count: number) => void;
 }
 
-export const PaginationContext = createContext<IPaginationContext | undefined>(
+const PaginationContext = createContext<IPaginationContext | undefined>(
   undefined
 );
 

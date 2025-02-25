@@ -1,8 +1,9 @@
 import "./App.css";
 import { TagsContextProvider } from "@/contexts/TagsContext";
-import TaggedImageBrowser from "./components/TaggedImageBrowser";
+import TaggedImageBrowser from "@/components/TaggedImageBrowser";
 import { useEffect, useState } from "react";
-import { IImageMetadata } from "./types/ImageMetadata";
+import { IImageMetadata } from "@/types/ImageMetadata";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
   const [images, setImages] = useState<IImageMetadata[]>([]);
@@ -19,9 +20,11 @@ function App() {
   }, []);
 
   return (
-    <TagsContextProvider>
-      <TaggedImageBrowser images={images} />
-    </TagsContextProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <TagsContextProvider>
+        <TaggedImageBrowser images={images} />
+      </TagsContextProvider>
+    </ThemeProvider>
   );
 }
 

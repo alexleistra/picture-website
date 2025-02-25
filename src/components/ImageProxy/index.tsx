@@ -11,19 +11,10 @@ export interface IImage extends IImageProxyOptions {
   className?: string;
   alt: string;
   src: string;
-  height?: string;
-  width?: string;
   options?: IImageProxyOptions;
 }
 
-const ImageProxy = ({
-  src,
-  alt,
-  className,
-  width,
-  height,
-  options,
-}: IImage) => {
+const ImageProxy = ({ src, alt, className, options }: IImage) => {
   if (import.meta.env.VITE_IMAGE_PROXY_URL) {
     src = `${import.meta.env.VITE_IMAGE_PROXY_URL}?img=${encodeURIComponent(
       src.startsWith("http") ? src : window.location.origin + src
@@ -41,9 +32,7 @@ const ImageProxy = ({
     <img
       src={src}
       alt={alt}
-      height={height}
-      width={width}
-      className={`${className}`}
+      className={`${className} max-h-full max-w-full object-contain`}
       loading="lazy"
     />
   );
