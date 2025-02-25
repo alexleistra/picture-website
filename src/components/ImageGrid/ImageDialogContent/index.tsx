@@ -13,6 +13,7 @@ import {
 import ImageProxy from "@/components/ImageProxy";
 import ImagePagination from "@/components/ImagePagination";
 import ImageCarousel from "@/components/ImageCarousel";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
@@ -33,17 +34,12 @@ const ImageDialogContent = ({
   const [tagsVisible, setTagsVisible] = useState(false);
 
   return (
-    <DialogContent
-      aria-describedby="Image carousel"
-      className="top-0 left-0 translate-x-0 translate-y-0 p-0 max-w-full"
-    >
-      <DialogHeader>
-        <DialogTitle className="mx-auto p-3 overflow-hidden">
-          {selectedImage?.description}
-        </DialogTitle>
+    <DialogContent aria-describedby="Image carousel" className="p-0">
+      <DialogHeader className="mx-9 my-3">
+        <DialogTitle className="">{selectedImage?.description}</DialogTitle>
       </DialogHeader>
-      <div className="flex flex-col h-screen">
-        <div className="flex-1 flex justify-center items-center overflow-hidden">
+      <div className="flex flex-col">
+        <div className="flex-1 flex justify-center items-center">
           {selectedImage?.file != undefined ? (
             <ImageProxy
               src={
@@ -79,19 +75,21 @@ const ImageDialogContent = ({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-wrap justify-center gap-1">
-            {selectedImage?.tags
-              .sort((a, b) => a.object.localeCompare(b.object))
-              .map((tag) => (
-                <Badge key={"dialog-" + tag.object}>
-                  <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    {tag.object}:{tag.confidence}
-                  </div>
-                </Badge>
-              ))}
+            <ScrollArea className="max-h-14 rounded-md border">
+              {selectedImage?.tags
+                .sort((a, b) => a.object.localeCompare(b.object))
+                .map((tag) => (
+                  <Badge key={"dialog-" + tag.object}>
+                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      {tag.object}:{tag.confidence}
+                    </div>
+                  </Badge>
+                ))}
+            </ScrollArea>
           </CollapsibleContent>
         </Collapsible>
 
-        <div className="flex-shrink-0 h-64 lg:h-80 p-3">
+        <div className="p-3">
           <ImageCarousel
             images={images}
             selectedImageIndex={selectedImageIndex}
