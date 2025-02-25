@@ -28,11 +28,7 @@ const Header = () => {
 
   return (
     <div className="sticky top-0 flex flex-wrap xl:flex-nowrap self-start items-center h-20 w-auto gap-4 p-4 bg-background">
-      <SidebarTrigger className="order-0" size="icon" />
-
-      <div className="order-2 xl:order-1 basis-full w-full mx-auto">
-        <ImagePagination />
-      </div>
+      <SidebarTrigger className="order-0 p-5" variant="outline" size="icon" />
       <div className="order-1 xl:order-2 flex items-center gap-3 ml-auto">
         <Popover>
           <PopoverTrigger asChild>
@@ -101,7 +97,7 @@ const Header = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="order-3">
+      <div className="order-2 xl:order-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -122,6 +118,9 @@ const Header = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+      <div className="order-3 xl:order-1 basis-full w-full mx-auto">
+        <ImagePagination />
       </div>
     </div>
   );
