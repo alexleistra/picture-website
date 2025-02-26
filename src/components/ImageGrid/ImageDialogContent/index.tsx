@@ -52,7 +52,7 @@ const ImageDialogContent = ({
               }
               alt={selectedImage?.description}
               className=""
-              options={{ format: "webp", height: "672" }}
+              options={{ format: "webp", height: 672 }}
             />
           ) : (
             <img height="672" src="placeholder.png" />
@@ -60,7 +60,7 @@ const ImageDialogContent = ({
         </div>
         <Collapsible
           open={tagsVisible}
-          className="flex flex-col justify-center items-center m-2 gap-2"
+          className="flex flex-col justify-center items-center pt-3"
         >
           <CollapsibleTrigger
             onClick={() => {
@@ -77,15 +77,16 @@ const ImageDialogContent = ({
               </Badge>
             )}
           </CollapsibleTrigger>
-          <CollapsibleContent className="flex flex-wrap justify-center gap-1">
+          <CollapsibleContent className="flex flex-wrap justify-center">
             <ScrollArea className="max-h-14 max-w-5xl">
               {selectedImage?.tags
                 .sort((a, b) => a.object.localeCompare(b.object))
                 .map((tag) => (
-                  <Badge key={"dialog-" + tag.object}>
-                    <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {tag.object}:{tag.confidence}
-                    </div>
+                  <Badge
+                    className="m-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    key={"dialog-" + tag.object}
+                  >
+                    {tag.object}:{tag.confidence}
                   </Badge>
                 ))}
             </ScrollArea>

@@ -46,12 +46,12 @@ const ImageCarousel = ({
               onClick={() => setSelected(image, index)}
               src={`${import.meta.env.VITE_IMAGE_PATH}/${image?.file}`}
               alt={image.description}
-              className={
+              className={`h-24 lg:h-32 w-auto border-blue-700 dark:border-white ${
                 selectedImageIndex == index
-                  ? "h-24 lg:h-40 w-auto pb-0 border-b-8 border-blue-700 dark:border-white"
-                  : "h-24 lg:h-40 w-auto pb-2 hover:pb-0 border-solid hover:border-b-8 border-blue-700 dark:border-white cursor-pointer"
-              }
-              options={{ format: "webp", height: "192" }}
+                  ? "pb-0 border-b-8"
+                  : "pb-2 hover:pb-0 border-solid hover:border-b-8 cursor-pointer"
+              }`}
+              options={{ format: "webp", height: 88 }}
             />
           </CarouselItem>
         ))}

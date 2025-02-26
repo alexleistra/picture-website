@@ -58,7 +58,7 @@ const ImageGrid = ({ images }: IImageGridParams) => {
                 className="h-auto w-[40vw] lg:h-80 lg:w-auto"
                 src={`${import.meta.env.VITE_IMAGE_PATH}/${image.file}`}
                 alt={image.description}
-                options={{ format: "webp", height: "320" }}
+                options={{ format: "webp", height: 320 }}
               />
             </DialogTrigger>
           </div>
