@@ -10,7 +10,9 @@ import {
 import { usePaginationContext } from "@/contexts/PaginationContext";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 
-const ImagePagination = () => {
+const ImagePagination = ({
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   const { itemCount, itemsPerPage, currentPage, setCurrentPage } =
     usePaginationContext();
 
@@ -35,7 +37,7 @@ const ImagePagination = () => {
   };
 
   return (
-    <Pagination>
+    <Pagination {...props} className={props.className}>
       <PaginationContent>
         <PaginationItem key="first">
           <PaginationLink size="sm" onClick={handleFirstClick}>

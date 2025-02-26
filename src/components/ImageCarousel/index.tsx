@@ -20,7 +20,8 @@ const ImageCarousel = ({
   images,
   selectedImageIndex,
   setSelected,
-}: ImageCarouselProps) => {
+  ...props
+}: ImageCarouselProps & React.HTMLAttributes<HTMLDivElement>) => {
   const [emblaApi, setEmblaApi] = useState<CarouselApi>();
 
   useEffect(() => {
@@ -31,29 +32,32 @@ const ImageCarousel = ({
   }, [emblaApi, selectedImageIndex]);
 
   return (
-    <Carousel setApi={setEmblaApi} className="px-10 bg-background">
-      <CarouselPrevious size="icon" className="absolute left-0" />
+    <Carousel
+      {...props}
+      setApi={setEmblaApi}
+      className={`px-14 bg-background ${props.className}`}
+    >
+      <CarouselPrevious size="icon" className="absolute left-3" />
 
       <CarouselContent className="flex items-center">
         {images.map((image, index) => (
-          <CarouselItem key={index} className="basis-auto p-0">
-            <div onClick={() => setSelected(image, index)}>
-              <ImageProxy
-                src={`${import.meta.env.VITE_IMAGE_PATH}/${image?.file}`}
-                alt={image.description}
-                className={
-                  selectedImageIndex == index
-                    ? "h-32 lg:h-48"
-                    : "h-24 lg:h-40 w-auto cursor-pointer"
-                }
-                options={{ format: "webp", height: "192" }}
-              />
-            </div>
+          <CarouselItem key={index} className="basis-auto">
+            <ImageProxy
+              onClick={() => setSelected(image, index)}
+              src={`${import.meta.env.VITE_IMAGE_PATH}/${image?.file}`}
+              alt={image.description}
+              className={
+                selectedImageIndex == index
+                  ? "h-24 lg:h-40 w-auto pb-0 border-b-8 border-blue-700 dark:border-white"
+                  : "h-24 lg:h-40 w-auto pb-2 hover:pb-0 border-solid hover:border-b-8 border-blue-700 dark:border-white cursor-pointer"
+              }
+              options={{ format: "webp", height: "192" }}
+            />
           </CarouselItem>
         ))}
       </CarouselContent>
 
-      <CarouselNext className="absolute right-0" />
+      <CarouselNext className="absolute right-3" />
     </Carousel>
   );
 };

@@ -27,9 +27,9 @@ const Header = () => {
   const { setTheme } = useTheme();
 
   return (
-    <div className="sticky top-0 flex flex-wrap xl:flex-nowrap self-start items-center h-20 w-auto gap-4 p-4 bg-background">
+    <div className="sticky top-0 flex flex-wrap lg:flex-nowrap self-start items-center w-auto gap-4 p-4 bg-background">
       <SidebarTrigger className="order-0 p-5" variant="outline" size="icon" />
-      <div className="order-1 xl:order-2 flex items-center gap-3 ml-auto">
+      <div className="order-1 lg:order-2 flex items-center gap-3 ml-auto">
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" size="icon">
@@ -97,7 +97,7 @@ const Header = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="order-2 xl:order-3">
+      <div className="order-2 lg:order-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -119,7 +119,7 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="order-3 xl:order-1 basis-full w-full mx-auto">
+      <div className="order-3 lg:order-1 basis-full w-full mx-auto">
         <ImagePagination />
       </div>
     </div>

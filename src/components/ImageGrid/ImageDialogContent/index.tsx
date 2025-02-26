@@ -34,12 +34,15 @@ const ImageDialogContent = ({
   const [tagsVisible, setTagsVisible] = useState(false);
 
   return (
-    <DialogContent aria-describedby="Image carousel" className="p-0">
-      <DialogHeader className="mx-9 my-3">
-        <DialogTitle className="">{selectedImage?.description}</DialogTitle>
-      </DialogHeader>
-      <div className="flex flex-col">
-        <div className="flex-1 flex justify-center items-center">
+    <DialogContent
+      aria-describedby="Image carousel"
+      className="p-0 left-0 top-0 w-screen max-w-screen max-h-screen translate-x-0 translate-y-0"
+    >
+      <div className="flex flex-col ios:h-ios h-[100vh]">
+        <DialogHeader className="flex-shrink-0 mx-9 my-3 mb-7">
+          <DialogTitle className="">{selectedImage?.description}</DialogTitle>
+        </DialogHeader>
+        <div className="flex-1 flex justify-center items-center overflow-hidden">
           {selectedImage?.file != undefined ? (
             <ImageProxy
               src={
@@ -75,7 +78,7 @@ const ImageDialogContent = ({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="flex flex-wrap justify-center gap-1">
-            <ScrollArea className="max-h-14 rounded-md border">
+            <ScrollArea className="max-h-14 max-w-5xl">
               {selectedImage?.tags
                 .sort((a, b) => a.object.localeCompare(b.object))
                 .map((tag) => (
@@ -88,16 +91,13 @@ const ImageDialogContent = ({
             </ScrollArea>
           </CollapsibleContent>
         </Collapsible>
-
-        <div className="p-3">
-          <ImageCarousel
-            images={images}
-            selectedImageIndex={selectedImageIndex}
-            setSelected={setSelected}
-          />
-
-          <ImagePagination />
-        </div>
+        <ImageCarousel
+          className="flex-shrink-0 py-3"
+          images={images}
+          selectedImageIndex={selectedImageIndex}
+          setSelected={setSelected}
+        />
+        <ImagePagination className="pb-3" />
       </div>
     </DialogContent>
   );
