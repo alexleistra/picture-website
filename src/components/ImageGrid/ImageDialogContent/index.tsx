@@ -43,7 +43,7 @@ const ImageDialogContent = ({
           <DialogTitle className="">{selectedImage?.description}</DialogTitle>
         </DialogHeader>
         <div className="flex-1 flex justify-center items-center overflow-hidden">
-          {selectedImage?.file != undefined ? (
+          {selectedImage?.file && (
             <ImageProxy
               src={
                 selectedImage
@@ -51,11 +51,9 @@ const ImageDialogContent = ({
                   : ""
               }
               alt={selectedImage?.description}
-              className=""
+              fetchPriority="high"
               options={{ format: "webp", height: 672 }}
             />
-          ) : (
-            <img height="672" src="placeholder.png" />
           )}
         </div>
         <Collapsible

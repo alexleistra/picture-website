@@ -51,6 +51,7 @@ const ImageCarousel = ({
                   ? "pb-0 border-b-8"
                   : "pb-2 hover:pb-0 border-solid hover:border-b-8 cursor-pointer"
               }`}
+              fetchPriority="low"
               options={{ format: "webp", height: 88 }}
             />
           </CarouselItem>

@@ -1,3 +1,6 @@
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
 export interface IImageProxyOptions {
   height?: number;
   width?: number;
@@ -44,14 +47,37 @@ const ImageProxy = ({
   options,
   ...props
 }: IImage & React.ImgHTMLAttributes<HTMLImageElement>) => {
+  const [loading, setLoading] = useState(true);
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>();
+  const [currentSrcSet, setCurrentSrcSet] = useState<string | undefined>();
+
   const baseUrl = import.meta.env.VITE_IMAGE_PROXY_URL;
   if (!baseUrl) {
     return (
-      <img
-        {...props}
-        className={`max-h-full max-w-full object-contain ${props.className}`}
-        loading="lazy"
-      />
+      <>
+        {loading && (
+          <div className="flex items-center justify-center">
+            <Loader2 className="animate-spin text-gray-500 w-8 h-8" />
+          </div>
+        )}
+        <img
+          {...props}
+          className={`max-h-full max-w-full object-contain ${props.className}`}
+          loading="lazy"
+          onLoad={(e) => {
+            setLoading(false);
+            if (props.onLoad) {
+              props.onLoad(e);
+            }
+          }}
+          onError={(e) => {
+            setLoading(false);
+            if (props.onError) {
+              props.onError(e);
+            }
+          }}
+        />
+      </>
     );
   }
 
@@ -64,15 +90,56 @@ const ImageProxy = ({
   const src1x = buildSrc(baseUrl, props.src, options, 1);
   const src2x = buildSrc(baseUrl, props.src, options, 2);
   const src3x = buildSrc(baseUrl, props.src, options, 3);
+  const srcSet = `${src1x} 1x, ${src2x} 2x, ${src3x} 3x`;
+
+  useEffect(() => {
+    // When src changes, reset state and wait for the new image to load
+    setLoading(true);
+    setCurrentSrc(undefined);
+
+    const img = new Image();
+    img.src = fallback;
+    img.onload = () => {
+      setCurrentSrc(fallback);
+      setCurrentSrcSet(srcSet);
+      setLoading(false);
+    };
+    img.onerror = () => {
+      setLoading(false);
+    };
+  }, [props.src]);
 
   return (
-    <img
-      {...props}
-      src={fallback}
-      srcSet={`${src1x} 1x, ${src2x} 2x, ${src3x} 3x`}
-      className={`max-h-full max-w-full object-contain ${props.className}`}
-      loading="lazy"
-    />
+    <>
+      {loading && (
+        <div className={`flex items-center justify-center h-[${props.height}]`}>
+          <Loader2 className="animate-spin text-gray-500 w-8 h-8" />
+        </div>
+      )}
+      {currentSrc && (
+        <img
+          {...props}
+          src={currentSrc}
+          srcSet={currentSrcSet}
+          className={`max-h-full max-w-full object-contain ${props.className}`}
+          loading="lazy"
+          onLoad={(e) => {
+            setCurrentSrc(fallback);
+            setCurrentSrcSet(srcSet);
+            setLoading(false);
+            if (props.onLoad) {
+              props.onLoad(e);
+            }
+          }}
+          onError={(e) => {
+            setLoading(false);
+            if (props.onError) {
+              props.onError(e);
+            }
+          }}
+        />
+      )}
+    </>
   );
 };
 
