@@ -8,6 +8,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { usePaginationContext } from "@/contexts/PaginationContext";
+import { DEFAULT_VISIBLE_PAGES } from "@/lib/constants";
 import { ChevronFirst, ChevronLast } from "lucide-react";
 
 const ImagePagination = ({
@@ -16,7 +17,6 @@ const ImagePagination = ({
   const { itemCount, itemsPerPage, currentPage, setCurrentPage } =
     usePaginationContext();
 
-  const visiblePages = 4;
   const totalPages = Math.ceil(itemCount / itemsPerPage);
   const pageNumbers: number[] = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -52,9 +52,11 @@ const ImagePagination = ({
         {pageNumbers
           .filter(
             (p) =>
-              (p < currentPage + visiblePages && p > 0 && p >= currentPage) ||
-              (currentPage > pageNumbers.length - visiblePages &&
-                p > pageNumbers.length - visiblePages)
+              (p < currentPage + DEFAULT_VISIBLE_PAGES &&
+                p > 0 &&
+                p >= currentPage) ||
+              (currentPage > pageNumbers.length - DEFAULT_VISIBLE_PAGES &&
+                p > pageNumbers.length - DEFAULT_VISIBLE_PAGES - 1)
           )
           .map((number) => (
             <PaginationItem key={number}>
@@ -67,7 +69,7 @@ const ImagePagination = ({
               </PaginationLink>
             </PaginationItem>
           ))}
-        {currentPage < pageNumbers.length - visiblePages + 1 ? (
+        {currentPage < pageNumbers.length - DEFAULT_VISIBLE_PAGES + 1 ? (
           <PaginationItem key="Ellipsis">
             <PaginationEllipsis />
           </PaginationItem>
