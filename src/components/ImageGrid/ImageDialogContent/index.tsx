@@ -35,7 +35,7 @@ const ImageDialogContent = ({
 
   return (
     <DialogContent
-      aria-describedby="Image carousel"
+      aria-describedby={undefined}
       className="p-0 left-0 top-0 w-screen max-w-screen max-h-screen translate-x-0 translate-y-0"
     >
       <div className="flex flex-col ios:h-ios h-[100vh]">

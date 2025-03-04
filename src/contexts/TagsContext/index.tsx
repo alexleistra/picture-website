@@ -1,3 +1,4 @@
+import { DEFAULT_TAG_TOLERANCE } from "@/lib/constants";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface ITagsContext {
@@ -12,8 +13,6 @@ interface ITagsContext {
 
 const TagsContext = createContext<ITagsContext | undefined>(undefined);
 
-export const DEFAULT_TOLERANCE = 80;
-
 export const useTagsContext = () => {
   const context = useContext(TagsContext);
   if (context === undefined) {
@@ -27,8 +26,9 @@ export const TagsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [confidenceTolerance, setConfidenceTolerance] =
-    useState<number>(DEFAULT_TOLERANCE);
+  const [confidenceTolerance, setConfidenceTolerance] = useState<number>(
+    DEFAULT_TAG_TOLERANCE
+  );
 
   useEffect(() => {
     // read JSON file and initialize state

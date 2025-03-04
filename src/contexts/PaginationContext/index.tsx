@@ -1,3 +1,4 @@
+import { DEFAULT_PAGE_SIZE } from "@/lib/constants";
 import { useState, createContext, useContext } from "react";
 
 export interface IPaginationContext {
@@ -27,7 +28,7 @@ export const PaginationContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(16);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_PAGE_SIZE);
   const [itemCount, setItemCount] = useState<number>(0);
 
   return (
