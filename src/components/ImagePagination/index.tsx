@@ -9,7 +9,12 @@ import {
 } from "@/components/ui/pagination";
 import { usePaginationContext } from "@/contexts/PaginationContext";
 import { DEFAULT_VISIBLE_PAGES } from "@/lib/constants";
-import { ChevronFirst, ChevronLast } from "lucide-react";
+import {
+  ChevronFirst,
+  ChevronLast,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 const ImagePagination = ({
   ...props
@@ -40,13 +45,26 @@ const ImagePagination = ({
     <Pagination {...props} className={props.className}>
       <PaginationContent>
         <PaginationItem key="first">
-          <PaginationLink size="sm" onClick={handleFirstClick}>
+          <PaginationLink
+            aria-label="Go to first page"
+            size="default"
+            onClick={handleFirstClick}
+          >
             <ChevronFirst />
             <span className="hidden sm:block"> First</span>
           </PaginationLink>
         </PaginationItem>
+
         <PaginationItem key="previous">
-          <PaginationPrevious onClick={() => paginationPrevious(currentPage)} />
+          <PaginationLink
+            aria-label="Go to previous page"
+            size="default"
+            className="gap-1 pl-2.5"
+            onClick={() => paginationPrevious(currentPage)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="hidden sm:block">Previous</span>
+          </PaginationLink>
         </PaginationItem>
 
         {pageNumbers
@@ -61,6 +79,7 @@ const ImagePagination = ({
           .map((number) => (
             <PaginationItem key={number}>
               <PaginationLink
+                aria-label={`Go to page ${number}`}
                 isActive={number == currentPage}
                 key={number}
                 onClick={() => setCurrentPage(number)}
@@ -76,12 +95,25 @@ const ImagePagination = ({
         ) : (
           <></>
         )}
+
         <PaginationItem key="next">
-          <PaginationNext onClick={() => paginationNext(currentPage)} />
+          <PaginationLink
+            aria-label="Go to next page"
+            size="default"
+            className="gap-1 pr-2.5"
+            onClick={() => paginationNext(currentPage)}
+          >
+            <span className="hidden sm:block">Next</span>
+            <ChevronRight className="h-4 w-4" />
+          </PaginationLink>
         </PaginationItem>
 
         <PaginationItem key="last">
-          <PaginationLink size="sm" onClick={handleLastClick}>
+          <PaginationLink
+            aria-label="Go to last page"
+            size="default"
+            onClick={handleLastClick}
+          >
             <span className="hidden sm:block">Last </span>
             <ChevronLast />
           </PaginationLink>

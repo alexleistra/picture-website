@@ -63,7 +63,6 @@ const ImageProxy = ({
         <img
           {...props}
           className={`max-h-full max-w-full object-contain ${props.className}`}
-          loading="lazy"
           onLoad={(e) => {
             setLoading(false);
             if (props.onLoad) {
@@ -89,8 +88,8 @@ const ImageProxy = ({
   );
   const src1x = buildSrc(baseUrl, props.src, options, 1);
   const src2x = buildSrc(baseUrl, props.src, options, 2);
-  const src3x = buildSrc(baseUrl, props.src, options, 3);
-  const srcSet = `${src1x} 1x, ${src2x} 2x, ${src3x} 3x`;
+  // const src3x = buildSrc(baseUrl, props.src, options, 3);
+  const srcSet = `${src1x} 1x, ${src2x} 2x`;
 
   useEffect(() => {
     // When src changes, reset state and wait for the new image to load
@@ -122,7 +121,6 @@ const ImageProxy = ({
           src={currentSrc}
           srcSet={currentSrcSet}
           className={`max-h-full max-w-full object-contain ${props.className}`}
-          loading="lazy"
           onLoad={(e) => {
             setCurrentSrc(fallback);
             setCurrentSrcSet(srcSet);

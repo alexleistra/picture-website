@@ -3,6 +3,7 @@ export interface IImageMetadata {
   description: string;
   subject: string;
   tags: IImageTag[];
+  processed: string;
 }
 
 export interface IImageTag {

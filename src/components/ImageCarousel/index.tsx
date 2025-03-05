@@ -41,18 +41,18 @@ const ImageCarousel = ({
 
       <CarouselContent className="flex items-center">
         {images.map((image, index) => (
-          <CarouselItem key={index} className="basis-auto">
+          <CarouselItem key={index} className=" p-0 basis-auto">
             <ImageProxy
               onClick={() => setSelected(image, index)}
               src={`${import.meta.env.VITE_IMAGE_PATH}/${image?.file}`}
               alt={image.description}
-              className={`h-24 lg:h-32 w-auto border-blue-700 dark:border-white ${
+              className={`h-10 lg:h-12 w-auto border-blue-700 dark:border-white ${
                 selectedImageIndex == index
                   ? "pb-0 border-b-8"
                   : "pb-2 hover:pb-0 border-solid hover:border-b-8 cursor-pointer"
               }`}
               fetchPriority="low"
-              options={{ format: "webp", height: 88 }}
+              options={{ format: "webp", height: 40 }}
             />
           </CarouselItem>
         ))}

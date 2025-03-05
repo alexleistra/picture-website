@@ -17,7 +17,7 @@ const TaggedImageBrowser = ({ images }: ITaggedImageBrowserParams) => {
         <div className="w-full">
           <Header />
 
-          <div className="mt-24">
+          <div className="mt-4">
             <ImageGrid images={images} />
           </div>
         </div>
