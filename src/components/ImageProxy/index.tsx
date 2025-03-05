@@ -17,12 +17,12 @@ export interface IImage extends IImageProxyOptions {
 }
 
 const buildSrc = (
-  baseUrl: string,
+  proxyBaseUrl: string,
   src: string,
   options?: IImageProxyOptions,
   dpi: number = 1
 ) => {
-  let imageUrl = `${baseUrl}?img=${encodeURIComponent(
+  let imageUrl = `${proxyBaseUrl}?img=${encodeURIComponent(
     src.startsWith("http") ? src : window.location.origin + src
   )}`;
 
@@ -49,45 +49,17 @@ const ImageProxy = ({
 }: IImage & React.ImgHTMLAttributes<HTMLImageElement>) => {
   const [loading, setLoading] = useState(true);
   const [currentSrc, setCurrentSrc] = useState<string | undefined>();
-  const [currentSrcSet, setCurrentSrcSet] = useState<string | undefined>();
 
-  const baseUrl = import.meta.env.VITE_IMAGE_PROXY_URL;
-  if (!baseUrl) {
-    return (
-      <>
-        {loading && (
-          <div className="flex items-center justify-center">
-            <Loader2 className="animate-spin text-gray-500 w-8 h-8" />
-          </div>
-        )}
-        <img
-          {...props}
-          className={`max-h-full max-w-full object-contain ${props.className}`}
-          onLoad={(e) => {
-            setLoading(false);
-            if (props.onLoad) {
-              props.onLoad(e);
-            }
-          }}
-          onError={(e) => {
-            setLoading(false);
-            if (props.onError) {
-              props.onError(e);
-            }
-          }}
-        />
-      </>
-    );
-  }
+  const proxyBaseUrl = import.meta.env.VITE_IMAGE_PROXY_URL;
 
   const fallback = buildSrc(
-    baseUrl,
+    proxyBaseUrl,
     props.src,
     { ...options, format: "jpg" },
     1
   );
-  const src1x = buildSrc(baseUrl, props.src, options, 1);
-  const src2x = buildSrc(baseUrl, props.src, options, 2);
+  const src1x = buildSrc(proxyBaseUrl, props.src, options, 1);
+  const src2x = buildSrc(proxyBaseUrl, props.src, options, 2);
   // const src3x = buildSrc(baseUrl, props.src, options, 3);
   const srcSet = `${src1x} 1x, ${src2x} 2x`;
 
@@ -100,13 +72,28 @@ const ImageProxy = ({
     img.src = fallback;
     img.onload = () => {
       setCurrentSrc(fallback);
-      setCurrentSrcSet(srcSet);
       setLoading(false);
     };
     img.onerror = () => {
       setLoading(false);
     };
   }, [props.src]);
+
+  if (!proxyBaseUrl) {
+    return (
+      <>
+        {loading && (
+          <div className="flex items-center justify-center">
+            <Loader2 className="animate-spin text-gray-500 w-8 h-8" />
+          </div>
+        )}
+        <img
+          {...props}
+          className={`max-h-full max-w-full object-contain ${props.className}`}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -119,22 +106,8 @@ const ImageProxy = ({
         <img
           {...props}
           src={currentSrc}
-          srcSet={currentSrcSet}
+          srcSet={srcSet}
           className={`max-h-full max-w-full object-contain ${props.className}`}
-          onLoad={(e) => {
-            setCurrentSrc(fallback);
-            setCurrentSrcSet(srcSet);
-            setLoading(false);
-            if (props.onLoad) {
-              props.onLoad(e);
-            }
-          }}
-          onError={(e) => {
-            setLoading(false);
-            if (props.onError) {
-              props.onError(e);
-            }
-          }}
         />
       )}
     </>

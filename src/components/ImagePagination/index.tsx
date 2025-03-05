@@ -4,8 +4,6 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { usePaginationContext } from "@/contexts/PaginationContext";
 import { DEFAULT_VISIBLE_PAGES } from "@/lib/constants";
